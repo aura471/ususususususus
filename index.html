@@ -325,26 +325,22 @@
 
         // --- Anti-Desktop Check ---
         if (window.innerWidth >= 768) {
-            return; // Desktop block already handles this
+            return;
         }
 
         // --- Anti-Chat System ---
         const checkForChat = () => {
-            // Check for common chat/automation patterns
             if (navigator.webdriver || 
-                window.chrome && window.chrome.runtime && 
-                navigator.plugins.length === 0 ||
+                (window.chrome && window.chrome.runtime && navigator.plugins.length === 0) ||
                 /HeadlessChrome/.test(window.navigator.userAgent)) {
                 document.getElementById('antiChatOverlay').style.display = 'flex';
                 return true;
             }
             
-            // Check for unusual behavior
             const startTime = performance.now();
             setTimeout(() => {
                 const endTime = performance.now();
                 if (endTime - startTime > 100) {
-                    // Suspicious timing behavior
                     document.getElementById('antiChatOverlay').style.display = 'flex';
                 }
             }, 0);
@@ -352,7 +348,6 @@
             return false;
         };
 
-        // Run anti-chat check on load
         if (checkForChat()) {
             return;
         }
@@ -400,15 +395,17 @@
 
         if (counterRef) {
             counterRef.on('value', (snapshot) => {
-                const val = snapshot.val() || 0;
-                currentCount = val;
-                countDisplay.textContent = toBn(val.toLocaleString('en-US'));
+                // Fixed: Get the actual numeric value from snapshot
+                const val = snapshot.val();
+                const numericVal = typeof val === 'number' ? val : 0;
+                currentCount = numericVal;
+                countDisplay.textContent = toBn(numericVal.toString());
             }, (error) => {
                 console.error("Database read failed:", error);
-                countDisplay.textContent = "N/A";
+                countDisplay.textContent = toBn('0');
             });
         } else {
-            countDisplay.textContent = toBn('1.2k');
+            countDisplay.textContent = toBn('0');
         }
 
         // --- Download Logic ---
@@ -417,7 +414,7 @@
         const btnSpinner = $('btn-spinner');
         const btnSvg = $('btn-svg');
         
-        // Check if APK exists
+        // Updated APK URL path
         const apkUrl = '/Al Minarah.apk';
         let apkExists = false;
         
@@ -439,20 +436,17 @@
                 return;
             }
             
-            // UI Loading State
             btnSvg.style.display = 'none';
             btnSpinner.style.display = 'block';
             btnText.textContent = 'প্রস্তুত হচ্ছে...';
             downloadBtn.style.pointerEvents = 'none';
 
-            // Check 24h cooldown using LocalStorage
             const lastDlKey = 'al_minarah_last_dl';
             const lastTime = localStorage.getItem(lastDlKey);
             const now = Date.now();
             const isRecent = lastTime && (now - parseInt(lastTime)) < (24 * 60 * 60 * 1000);
 
             const finishDownload = () => {
-                // Create hidden link to download
                 const a = document.createElement('a');
                 a.href = apkUrl;
                 a.download = 'Al_Minarah_v1.2.apk';
@@ -462,7 +456,6 @@
 
                 showToast('ডাউনলোড শুরু হয়েছে!');
                 
-                // Reset UI
                 setTimeout(() => {
                     btnSvg.style.display = 'block';
                     btnSpinner.style.display = 'none';
@@ -471,7 +464,6 @@
                 }, 1000);
             };
 
-            // If connected to DB and not recent, increment count
             if (counterRef && !isRecent) {
                 counterRef.transaction(current => {
                     return (current || 0) + 1;
