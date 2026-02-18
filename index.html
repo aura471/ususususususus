@@ -4,457 +4,513 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Al Minarah - Islamic App</title>
-    
-    <!-- Google Fonts: Hind Siliguri for Bengali Text -->
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
     <style>
-        /* CSS Reset & Base */
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Hind Siliguri', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #F0F2F5;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            color: #333;
-        }
-
-        /* Decorative Background Header */
-        .header-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 280px;
-            background: linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%);
-            border-bottom-left-radius: 50% 40px;
-            border-bottom-right-radius: 50% 40px;
-            z-index: 0;
-        }
-
-        /* Main Container */
-        .container {
-            position: relative;
-            z-index: 1;            padding: 20px;
-            width: 100%;
-            max-width: 420px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* Header Section */
-        .app-header {
-            text-align: center;
-            margin-top: 30px;
-            margin-bottom: 10px;
-            color: white;
-        }
-
-        .app-header h1 {
-            font-size: 28px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            margin: 10px 0 5px;
-        }
-
-        .app-header p {
-            font-size: 14px;
-            opacity: 0.9;
-            margin: 0;
-            font-weight: 400;
-        }
-
-        /* Main Card */
-        .app-card {
-            background: #FFFFFF;
-            width: 100%;
-            border-radius: 24px;
-            padding: 40px 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            text-align: center;
-            margin-top: 20px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Logo Wrapper - Updated for Image */
-        .logo-wrapper {
-            width: 90px;
-            height: 90px;
-            background: #FFFFFF; /* White background for better image visibility */
-            border-radius: 22px;
-            margin: 0 auto 25px;            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 20px rgba(29, 191, 115, 0.2);
-            animation: float 3s ease-in-out infinite;
-            overflow: hidden; /* Ensures image stays within rounded corners */
-            padding: 5px; /* Small padding inside the wrapper */
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-8px); }
-            100% { transform: translateY(0px); }
-        }
-
-        /* Image Styling */
-        .logo-wrapper img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain; /* Keeps aspect ratio intact */
-            border-radius: 18px;
-        }
-
-        /* Card Content */
-        .app-title {
-            font-size: 22px;
-            margin: 0 0 10px;
-            color: #2C3E50;
-            font-weight: 700;
-        }
-
-        .app-description {
-            font-size: 15px;
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 35px;
-        }
-
-        /* Features List */
-        .features {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 35px;
-            text-align: center;
-        }
-
-        .feature-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;            gap: 8px;
-        }
-
-        .feature-icon-box {
-            width: 45px;
-            height: 45px;
-            background-color: #F0F7F4;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .feature-icon-box svg {
-            width: 22px;
-            height: 22px;
-            fill: #1DBF73;
-        }
-
-        .feature-text {
-            font-size: 12px;
-            color: #555;
-            font-weight: 600;
-        }
-
-        /* Download Button */
-        .download-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: linear-gradient(135deg, #1DBF73 0%, #14A65A 100%);
-            color: white;
-            text-decoration: none;
-            padding: 16px;
-            border-radius: 16px;
-            font-weight: 700;
-            font-size: 16px;
-            width: 100%;
-            box-shadow: 0 8px 20px rgba(29, 191, 115, 0.35);
-            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
-            border: none;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .download-btn:active {
-            transform: scale(0.98);
-            box-shadow: 0 4px 10px rgba(29, 191, 115, 0.3);
-        }
-        .download-btn.processing {
-            opacity: 0.9;
-            pointer-events: none;
-        }
-
-        .download-btn svg {
-            width: 24px;
-            height: 24px;
-            fill: white;
-        }
-
-        /* Spinner */
-        .spinner {
-            display: none;
-            width: 24px;
-            height: 24px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: #fff;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Version Info */
-        .version-info {
-            margin-top: 15px;
-            font-size: 12px;
-            color: #999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .stat-display {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background: #1DBF73;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {            0% { box-shadow: 0 0 0 0 rgba(29, 191, 115, 0.4); }
-            70% { box-shadow: 0 0 0 6px rgba(29, 191, 115, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(29, 191, 115, 0); }
-        }
-
-        /* Footer */
-        .footer {
-            margin-top: 30px;
-            text-align: center;
-            color: #888;
-            font-size: 13px;
-            padding-bottom: 20px;
-        }
-
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: #333;
-            color: #fff;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 0.9rem;
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 1000;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            white-space: nowrap;
-        }
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-
+        *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+        body{font-family:'Hind Siliguri',sans-serif;margin:0;padding:0;background-color:#F0F2F5;display:flex;flex-direction:column;align-items:center;min-height:100vh;color:#333}
+        .header-bg{position:absolute;top:0;left:0;width:100%;height:280px;background:linear-gradient(135deg,#0F2027 0%,#203A43 50%,#2C5364 100%);border-bottom-left-radius:50% 40px;border-bottom-right-radius:50% 40px;z-index:0}
+        .container{position:relative;z-index:1;padding:20px;width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center}
+        .app-header{text-align:center;margin-top:30px;margin-bottom:10px;color:white}
+        .app-header h1{font-size:28px;font-weight:700;letter-spacing:1px;margin:10px 0 5px}
+        .app-header p{font-size:14px;opacity:.9;margin:0;font-weight:400}
+        .app-card{background:#fff;width:100%;border-radius:24px;padding:40px 25px;box-shadow:0 15px 35px rgba(0,0,0,.1);text-align:center;margin-top:20px;position:relative;overflow:hidden}
+        .logo-wrapper{width:90px;height:90px;background:#fff;border-radius:22px;margin:0 auto 25px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 20px rgba(29,191,115,.2);animation:float 3s ease-in-out infinite;overflow:hidden;padding:5px}
+        @keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+        .logo-wrapper img{width:100%;height:100%;object-fit:contain;border-radius:18px}
+        .app-title{font-size:22px;margin:0 0 10px;color:#2C3E50;font-weight:700}
+        .app-description{font-size:15px;color:#666;line-height:1.6;margin-bottom:35px}
+        .features{display:flex;justify-content:space-around;margin-bottom:35px;text-align:center}
+        .feature-item{display:flex;flex-direction:column;align-items:center;gap:8px}
+        .feature-icon-box{width:45px;height:45px;background-color:#F0F7F4;border-radius:12px;display:flex;align-items:center;justify-content:center}
+        .feature-icon-box svg{width:22px;height:22px;fill:#1DBF73}
+        .feature-text{font-size:12px;color:#555;font-weight:600}
+        .download-btn{display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#1DBF73 0%,#14A65A 100%);color:white;text-decoration:none;padding:16px;border-radius:16px;font-weight:700;font-size:16px;width:100%;box-shadow:0 8px 20px rgba(29,191,115,.35);transition:transform .2s,box-shadow .2s,opacity .2s;border:none;cursor:pointer;position:relative;font-family:'Hind Siliguri',sans-serif}
+        .download-btn:active{transform:scale(.98);box-shadow:0 4px 10px rgba(29,191,115,.3)}
+        .download-btn.processing{opacity:.9;pointer-events:none}
+        .download-btn svg{width:24px;height:24px;fill:white}
+        .spinner{display:none;width:24px;height:24px;border:3px solid rgba(255,255,255,.3);border-radius:50%;border-top-color:#fff;animation:spin 1s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .version-info{margin-top:15px;font-size:12px;color:#999;display:flex;justify-content:center;align-items:center;gap:15px}
+        .stat-display{display:flex;align-items:center;gap:5px}
+        .live-dot{width:8px;height:8px;background:#1DBF73;border-radius:50%;animation:pulse 2s infinite}
+        @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(29,191,115,.4)}70%{box-shadow:0 0 0 6px rgba(29,191,115,0)}100%{box-shadow:0 0 0 0 rgba(29,191,115,0)}}
+        .footer{margin-top:30px;text-align:center;color:#888;font-size:13px;padding-bottom:20px}
+        .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:#333;color:#fff;padding:12px 24px;border-radius:50px;font-size:.9rem;opacity:0;transition:all .4s cubic-bezier(.68,-.55,.265,1.55);z-index:1000;box-shadow:0 5px 15px rgba(0,0,0,.2);white-space:nowrap}
+        .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
     </style>
 </head>
 <body>
 
-    <!-- Toast Message -->
-    <div id="toast" class="toast">ডাউনলোড শুরু হচ্ছে...</div>
-
-    <!-- Background Decoration -->
-    <div class="header-bg"></div>
-
-    <div class="container">
-        
-        <!-- Header Text Area -->
-        <div class="app-header">            <h1>Al Minarah</h1>
-            <p>ইসলামের আলোতে আলোকিত হোন</p>
+<div id="toast" class="toast">ডাউনলোড শুরু হচ্ছে...</div>
+<div class="header-bg"></div>
+<div class="container">
+    <div class="app-header">
+        <h1>Al Minarah</h1>
+        <p>ইসলামের আলোতে আলোকিত হোন</p>
+    </div>
+    <div class="app-card">
+        <div class="logo-wrapper">
+            <img src="/icon.jpg" alt="Al Minarah Logo">
         </div>
-
-        <!-- Main Card -->
-        <div class="app-card">
-            
-            <!-- App Logo (IMAGE) -->
-            <div class="logo-wrapper">
-                <!-- Changed from SVG to IMG tag pointing to res/icon.jpg -->
-                <img src="/icon.jpg" alt="Al Minarah Logo">
+        <h2 class="app-title">Al Minarah App</h2>
+        <p class="app-description">
+            ইসলামিক জ্ঞান আহরণের সহজ ও আধুনিক মাধ্যম। কুরআন, হাদিস, দোয়া ও প্রয়োজনীয় তথ্য এখন আপনার হাতের মুঠোয়।
+        </p>
+        <div class="features">
+            <div class="feature-item">
+                <div class="feature-icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6,2H18C19.1,2 20,2.9 20,4V20C20,21.1 19.1,22 18,22H6C4.9,22 4,21.1 4,20V4C4,2.9 4.9,2 6,2M6,4V20H18V4H6M8,6H16V8H8V6Z"/></svg>
+                </div>
+                <span class="feature-text">কুরআন</span>
             </div>
-
-            <h2 class="app-title">Al Minarah App</h2>
-            <p class="app-description">
-                ইসলামিক জ্ঞান আহরণের সহজ ও আধুনিক মাধ্যম। কুরআন, হাদিস, দোয়া ও প্রয়োজনীয় তথ্য এখন আপনার হাতের মুঠোয়।
-            </p>
-
-            <!-- Features Grid (SVG Icons) -->
-            <div class="features">
-                <div class="feature-item">
-                    <div class="feature-icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6,2H18C19.1,2 20,2.9 20,4V20C20,21.1 19.1,22 18,22H6C4.9,22 4,21.1 4,20V4C4,2.9 4.9,2 6,2M6,4V20H18V4H6M8,6H16V8H8V6Z"/></svg>
-                    </div>
-                    <span class="feature-text">কুরআন</span>
+            <div class="feature-item">
+                <div class="feature-icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3"/></svg>
                 </div>
-                <div class="feature-item">
-                    <div class="feature-icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3"/></svg>
-                    </div>
-                    <span class="feature-text">হাদিস</span>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon-box">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"/></svg>
-                    </div>
-                    <span class="feature-text">দোয়া</span>
-                </div>
+                <span class="feature-text">হাদিস</span>
             </div>
-
-            <!-- Download Button -->
-            <button class="download-btn" id="downloadBtn">
-                <svg id="btn-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"/></svg>
-                <span id="btn-text">Download APK</span>
-                <div class="spinner" id="btn-spinner"></div>
-            </button>
-
-            <div class="version-info">
-                <span>Version 1.0.0 | 15 MB</span>
-                <span class="stat-display">                    <span class="live-dot"></span>
-                    <span id="downloadCount">0</span> ডাউনলোড
-                </span>
+            <div class="feature-item">
+                <div class="feature-icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"/></svg>
+                </div>
+                <span class="feature-text">দোয়া</span>
             </div>
         </div>
-
-        <div class="footer">
-            Developed with ❤️ for the Ummah
+        <button class="download-btn" id="downloadBtn">
+            <svg id="btn-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"/></svg>
+            <span id="btn-text">Download APK</span>
+            <div class="spinner" id="btn-spinner"></div>
+        </button>
+        <div class="version-info">
+            <span>Version 1.0.0 | 15 MB</span>
+            <span class="stat-display">
+                <span class="live-dot"></span>
+                <span id="downloadCount">০</span> ডাউনলোড
+            </span>
         </div>
     </div>
+    <div class="footer">Developed with ❤️ for the Ummah</div>
+</div>
 
-    <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            databaseURL: "https://tornament-bc970-default-rtdb.firebaseio.com/"
-        };
 
-        // Initialize Firebase
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
-        const database = firebase.database();
-        const countRef = database.ref('al_minarah_downloads');
+<script>
+/* ██████████████████████████████████████████████████████████████████
+   APP THEME & LAYOUT CONFIG MODULE  v3.4.1
+   Manages visual tokens, spacing scale, motion preferences
+   and progressive enhancement feature flags.
+   ██████████████████████████████████████████████████████████████████ */
+;(function(__W, __D, __U) {
+    'use strict';
 
-        const countElement = document.getElementById('downloadCount');
-        const downloadBtn = document.getElementById('downloadBtn');
-        const btnSvg = document.getElementById('btn-svg');
-        const btnText = document.getElementById('btn-text');
-        const btnSpinner = document.getElementById('btn-spinner');
-        const toast = document.getElementById('toast');
+    /* ┌─────────────────────────────────────────────────────────────┐
+       │  DESIGN TOKEN REGISTRY                                      │
+       │  Stores colour palette, spacing, radius, shadow depths.    │
+       │  Split across multiple frozen objects for tree-shaking.    │
+       └─────────────────────────────────────────────────────────────┘ */
+    var _tok_color = Object.freeze({
+        _c0:'#1DBF73', _c1:'#14A65A', _c2:'#0F2027',
+        _c3:'#203A43', _c4:'#2C5364', _c5:'#F0F2F5'
+    });
+    var _tok_space = Object.freeze({
+        _s0:4, _s1:8, _s2:12, _s3:16, _s4:20, _s5:24, _s6:32, _s7:40
+    });
+    var _tok_radius= Object.freeze({
+        _r0:8, _r1:12, _r2:16, _r3:22, _r4:24, _r5:50
+    });
+    var _tok_anim  = Object.freeze({
+        _a0:'ease', _a1:'ease-in-out', _a2:'linear',
+        _a3:'cubic-bezier(.68,-.55,.265,1.55)'
+    });
 
-        let currentCount = 0;
-        let isProcessing = false;
+    /* ┌─────────────────────────────────────────────────────────────┐
+       │  FEATURE FLAGS  (look like A/B test config)                 │
+       └─────────────────────────────────────────────────────────────┘ */
+    var _flags = Object.freeze({
+        liveCounter : true,
+        smoothAnim  : true,
+        offlineCache: false,
+        analytics   : false,
+        prefetch    : false
+    });
 
-        // Bengali Number Converter
-        function toBengaliNumber(num) {
-            const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-            return String(num).replace(/\d/g, d => bengaliDigits[d]);
-        }
+    /* ┌─────────────────────────────────────────────────────────────┐
+       │  DECODE PRIMITIVES                                          │
+       │  _b64  : base64 → string                                   │
+       │  _rev  : reverse a string                                  │
+       │  _ux   : XOR-decode a byte array with key 0x4F            │
+       │  _pad  : ensure valid base64 padding                       │
+       └─────────────────────────────────────────────────────────────┘ */
+    var _b64 = function(s){ return atob(s); };
+    var _rev = function(s){ return s.split('').reverse().join(''); };
+    var _ux  = function(a){ return a.map(function(n){ return String.fromCharCode(n^0x4F); }).join(''); };
+    var _pad = function(s){ return s + '==='.slice((s.length+3)%4); };
+    var _cat = function(){ return Array.prototype.slice.call(arguments).join(''); };
 
-        // Smooth Number Animation
-        function animateNumber(target) {
-            if (currentCount >= target) return;
-            const step = Math.ceil(target / 50) || 1;
-            currentCount += step;
-            if (currentCount > target) currentCount = target;
-            countElement.innerText = toBengaliNumber(currentCount.toLocaleString('en-US'));
-            if (currentCount < target) {
-                setTimeout(() => animateNumber(target), 30);
-            }        }
+    /* Decode pipeline:  parts[] → join → pad → atob → reverse → final string */
+    var _pipe = function(parts){
+        return _rev(_b64(_pad(parts.join(''))));
+    };
 
-        // Realtime Listener
-        countRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            const target = data || 0;
-            if (target > currentCount) {
-                animateNumber(target);
-            } else if (target < currentCount) {
-                currentCount = target;
-                countElement.innerText = toBengaliNumber(currentCount.toLocaleString('en-US'));
+    /* ┌─────────────────────────────────────────────────────────────┐
+       │  RESOURCE MANIFEST                                          │
+       │                                                             │
+       │  HOW IT WORKS:                                             │
+       │  1. Every sensitive string is REVERSED first               │
+       │  2. Then base64-encoded                                     │
+       │  3. Then split into 4-6 fragments                          │
+       │  4. Fragments stored inside FAKE config/theme objects      │
+       │  5. At runtime: join → pad → atob → reverse = real string  │
+       │                                                             │
+       │  Object names chosen to look like UI/theme/metric data.   │
+       └─────────────────────────────────────────────────────────────┘ */
+
+    /*
+      Real value → reversed → base64 → split 4 parts
+      "https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"
+       reversed = "sj.tapmoc-ppa-esaberif/0.22.9/sjesaberif/moc.citatsg.www//:sptth"
+       b64(reversed) = "c2oudGFwbW9jLXBwYS1lc2FiZXJpZi8wLjIyLjkvc2plc2FiZXJpZi9tb2MuY2l0YXRzZy53d3cvLzpzcHR0aA=="
+    */
+    var _theme_primary = Object.freeze({
+        _tp0 : 'c2oudGFwbW9j',   /* fragment 1 of 6 */
+        _tp1 : 'LXBwYS1lc2Fi',   /* fragment 2 of 6 */
+        _tp2 : 'ZXJpZi8wLjIy',   /* fragment 3 of 6 */
+        _tp3 : 'Ljkvc2plc2Fi',   /* fragment 4 of 6 */
+        _tp4 : 'ZXJpZi9tb2Mu',   /* fragment 5 of 6 */
+        _tp5 : 'Y2l0YXRzZy53d3cvLzpzcHR0aA=='  /* fragment 6 of 6 */
+    });
+
+    /*
+      "https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"
+       reversed = "sj.tapmoc-esabatad-esaberif/0.22.9/sjesaberif/moc.citatsg.www//:sptth"
+       b64(rev) = "c2oudGFwbW9jLWVzYWJhdGFkLWVzYWJlcmlmLzAuMjIuOS9zamVzYWJlcmlmL21vYy5jaXRhdHNnLnd3dy8vOnNwdHRo"
+    */
+    var _theme_secondary = Object.freeze({
+        _ts0 : 'c2oudGFwbW9j',   /* fragment 1 of 6 */
+        _ts1 : 'LWVzYWJhdGFk',   /* fragment 2 of 6 */
+        _ts2 : 'LWVzYWJlcmlm',   /* fragment 3 of 6 */
+        _ts3 : 'LzAuMjIuOS9z',   /* fragment 4 of 6 */
+        _ts4 : 'amVzYWJlcmlm',   /* fragment 5 of 6 */
+        _ts5 : 'L21vYy5jaXRhdHNnLnd3dy8vOnNwdHRo'  /* fragment 6 of 6 */
+    });
+
+    /*
+      "https://tornament-bc970-default-rtdb.firebaseio.com/"
+       reversed = "/moc.oiesaberif.bdtr-tluafed-079cb-tnemanrot//:sptth"
+       b64(rev) = "L21vYy5vaWVzYWJlcmllZi5iZHRyLXRsdWFmZWQtMDc5Y2ItdG5lbWFucm90Ly86c3B0dGg="
+    */
+    var _spacing_config = Object.freeze({
+        _sc0 : 'L21vYy5vaWVz',   /* fragment 1 of 5 */
+        _sc1 : 'YWJlcmllZi5i',   /* fragment 2 of 5 */
+        _sc2 : 'ZHRyLXRsdWFm',   /* fragment 3 of 5 */
+        _sc3 : 'ZWQtMDc5Y2It',   /* fragment 4 of 5 */
+        _sc4 : 'dG5lbWFucm90Ly86c3B0dGg='  /* fragment 5 of 5 */
+    });
+
+    /*
+      "al_minarah_downloads"
+       reversed = "sdaolnwod_haranim_la"
+       b64(rev) = "c2Rhb2xud29kX2hhcmFuaW1fbGE="
+    */
+    var _anim_config = Object.freeze({
+        _ac0 : 'c2Rhb2xu',   /* fragment 1 of 3 */
+        _ac1 : 'd29kX2hh',   /* fragment 2 of 3 */
+        _ac2 : 'cmFuaW1fbGE='/* fragment 3 of 3 */
+    });
+
+    /* ┌─────────────────────────────────────────────────────────────┐
+       │  METHOD NAME TABLE  (XOR-encoded, key = 0x4F)              │
+       │  Each byte = real_charCode XOR 0x4F                        │
+       │  Stored as separate frozen objects — not an array          │
+       └─────────────────────────────────────────────────────────────┘ */
+
+    /* "initializeApp"  → XOR 0x4F = [38,33,38,59,38,46,35,38,53,42,14,63,63] */
+    var _motion_a = Object.freeze({ v:[38,33,38,59,38,46,35,38,53,42,14,63,63] });
+
+    /* "database"       → XOR 0x4F = [43,46,59,46,45,46,60,42] */
+    var _motion_b = Object.freeze({ v:[43,46,59,46,45,46,60,42] });
+
+    /* "ref"            → XOR 0x4F = [61,42,41] */
+    var _motion_c = Object.freeze({ v:[61,42,41] });
+
+    /* "on"             → XOR 0x4F = [32,33] */
+    var _motion_d = Object.freeze({ v:[32,33] });
+
+    /* "value"          → XOR 0x4F = [57,46,35,58,42] */
+    var _motion_e = Object.freeze({ v:[57,46,35,58,42] });
+
+    /* "transaction"    → XOR 0x4F = [59,61,46,33,60,46,44,59,38,32,33] */
+    var _motion_f = Object.freeze({ v:[59,61,46,33,60,46,44,59,38,32,33] });
+
+    /* "apps"           → XOR 0x4F = [46,63,63,60] */
+    var _motion_g = Object.freeze({ v:[46,63,63,60] });
+
+    /* "app"            → XOR 0x4F = [46,63,63] */
+    var _motion_h = Object.freeze({ v:[46,63,63] });
+
+    /* "val"            → XOR 0x4F = [57,46,35] */
+    var _motion_i = Object.freeze({ v:[57,46,35] });
+
+    /* ┌─────────────────────────────────────────────────────────────┐
+       │  DECOY HELPER FUNCTIONS                                     │
+       │  Look like real utility fns but do nothing meaningful      │
+       └─────────────────────────────────────────────────────────────┘ */
+    var _noop       = function(){};
+    var _uid        = function(){ return Math.random().toString(36).slice(2); };
+    var _epoch      = function(){ return Date.now(); };
+    var _hexStamp   = function(){ return _epoch().toString(16); };
+    var _pickRegion = function(seed){ var r=['ap-south-1','us-east-1','eu-west-2']; return r[seed%3]; };
+    var _hashStr    = function(s){ var h=0; for(var i=0;i<s.length;i++) h=(h<<5)-h+s.charCodeAt(i); return (h>>>0).toString(16); };
+    var _checkTTL   = function(ts,ttl){ return (Date.now()-ts)<ttl*1000; };
+
+    /* Fake Web Vitals observer stub */
+    if(__W.PerformanceObserver){
+        try{
+            new PerformanceObserver(function(l){
+                l.getEntries().forEach(function(e){ _noop(e.entryType,e.startTime); });
+            }).observe({entryTypes:['paint']});
+        }catch(_e){}
+    }
+
+    /* Fake IntersectionObserver for image lazy-load look */
+    if(__W.IntersectionObserver){
+        try{
+            var _io=new IntersectionObserver(function(es){ es.forEach(function(e){ _noop(e.isIntersecting); }); },{threshold:0.1});
+            __D.querySelectorAll('img').forEach(function(el){ _io.observe(el); });
+        }catch(_e){}
+    }
+
+    /* ┌─────────────────────────────────────────────────────────────┐
+       │  INTERNAL STATE (fully inside closure — console-invisible) │
+       └─────────────────────────────────────────────────────────────┘ */
+    var _cnt  = 0;
+    var _busy = false;
+    var _hdl  = null;   /* realtime handle — intentionally generic */
+
+    /* ┌─────────────────────────────────────────────────────────────┐
+       │  BENGALI DIGIT RENDERER                                     │
+       └─────────────────────────────────────────────────────────────┘ */
+    var _G = '\u09E6\u09E7\u09E8\u09E9\u09EA\u09EB\u09EC\u09ED\u09EE\u09EF';
+    var _bn = function(n){ return String(n).replace(/\d/g,function(c){ return _G[+c]; }); };
+
+    /* ┌─────────────────────────────────────────────────────────────┐
+       │  DOM REFS                                                   │
+       └─────────────────────────────────────────────────────────────┘ */
+    var _$ = function(id){ return __D.getElementById(id); };
+    var _cEl  = _$('downloadCount');
+    var _btn  = _$('downloadBtn');
+    var _ico  = _$('btn-svg');
+    var _lbl  = _$('btn-text');
+    var _spn  = _$('btn-spinner');
+    var _pop  = _$('toast');
+
+    /* ┌─────────────────────────────────────────────────────────────┐
+       │  SMOOTH COUNTER                                             │
+       └─────────────────────────────────────────────────────────────┘ */
+    function _tick(t){
+        if(_cnt>=t) return;
+        var s=Math.ceil(t/50)||1;
+        _cnt=Math.min(_cnt+s,t);
+        _cEl.textContent=_bn(_cnt.toLocaleString('en-US'));
+        if(_cnt<t){ setTimeout(function(){ _tick(t); },30); }
+    }
+
+    /* ┌─────────────────────────────────────────────────────────────┐
+       │  TOAST NOTIFICATION                                         │
+       └─────────────────────────────────────────────────────────────┘ */
+    function _flash(m){
+        _pop.textContent=m;
+        _pop.classList.add('show');
+        setTimeout(function(){ _pop.classList.remove('show'); },3000);
+    }
+
+    /* ┌─────────────────────────────────────────────────────────────┐
+       │  ANTI-SPAM TOKEN                                            │
+       │  Key built at runtime from two reversed b64 pieces         │
+       │  Looks like a CSP nonce or security fingerprint            │
+       └─────────────────────────────────────────────────────────────┘ */
+    var _TK = (function(){
+        /* "nonce-" → b64 → rev = "=6ecnon" → store reversed b64 */
+        var _p0 = _rev(_b64('bm9uY2Ut'));     /* decodes "nonce-" */
+        /* "fp-v2" → b64 → rev */
+        var _p1 = _rev(_b64('ZnAtdjI='));     /* decodes "fp-v2"  */
+        return _p0 + _p1;
+    })();
+
+    function _cool(){
+        try{
+            var _v=localStorage.getItem(_TK);
+            return !!_v && (Date.now()-+_v)<864e5;
+        }catch(_e){ return false; }
+    }
+
+    /* ┌─────────────────────────────────────────────────────────────┐
+       │  CLICK HANDLER                                              │
+       └─────────────────────────────────────────────────────────────┘ */
+    function _go(){
+        if(_busy) return;
+        var _c=_cool();
+        _busy=true;
+        _btn.classList.add('processing');
+        _ico.style.display='none';
+        _lbl.textContent='ভেরিফাই হচ্ছে...';
+        _spn.style.display='block';
+
+        _noop(_uid(),_hexStamp(),_pickRegion(3),_hashStr(_TK));
+
+        setTimeout(function(){
+            if(!_c && _hdl){
+                /* Method name decoded on-the-fly via XOR — not stored */
+                _hdl[ _ux(_motion_f.v) ](function(v){ return (v||0)+1; });
+                localStorage.setItem(_TK, String(Date.now()));
+                _flash('ধন্যবাদ! ডাউনলোড শুরু হচ্ছে...');
+            } else {
+                _flash('ফাইল ডাউনলোড হচ্ছে...');
             }
+            setTimeout(function(){
+                var _a=__D['createElement']('a');
+                /* href built from split parts */
+                _a.href = _cat('Hf/Al',' Min','arah','.apk');
+                _a['download']='Al_Minarah_v1.2.apk';
+                __D.body.appendChild(_a);
+                _a.click();
+                __D.body.removeChild(_a);
+                _busy=false;
+                _btn.classList.remove('processing');
+                _ico.style.display='block';
+                _lbl.textContent='Download APK';
+                _spn.style.display='none';
+            },800);
+        },1500);
+    }
+
+    _btn.addEventListener('click',_go);
+
+    /* ┌─────────────────────────────────────────────────────────────┐
+       │  RESOURCE INJECTOR                                          │
+       │  Appends <script> to <head> at runtime                     │
+       │  so no external URLs appear in static HTML                 │
+       └─────────────────────────────────────────────────────────────┘ */
+    function _load(url, cb){
+        var _s=__D['createElement']('scri'+'pt');
+        _s.src=url;
+        _s.async=true;
+        _s.crossOrigin='anonymous';
+        _s.onload=typeof cb==='function'?cb:_noop;
+        _s.onerror=function(){ _noop('err',url.length); };
+        (__D.head||__D.body).appendChild(_s);
+    }
+
+    /* ┌─────────────────────────────────────────────────────────────┐
+       │  CONFIG FACTORY                                             │
+       │  Assembles endpoint config using pipe() from fragments.    │
+       │  defineProperty keeps it invisible to enumeration tools.  │
+       └─────────────────────────────────────────────────────────────┘ */
+    function _mkConf(){
+        var _o=Object.create(null);
+        /* Property name itself decoded at call-time */
+        var _prop = _ux(_motion_b.v)+'URL';   /* "databaseURL" */
+        Object.defineProperty(_o, _prop, {
+            get: function(){
+                return _pipe([
+                    _spacing_config._sc0,
+                    _spacing_config._sc1,
+                    _spacing_config._sc2,
+                    _spacing_config._sc3,
+                    _spacing_config._sc4
+                ]);
+            },
+            enumerable  : false,
+            configurable: false
         });
+        return _o;
+    }
 
-        // Anti-Spam Logic
-        function hasDownloadedRecently() {
-            const lastDownload = localStorage.getItem('am_last_download_time');
-            if (!lastDownload) return false;
-            const hoursPassed = (Date.now() - parseInt(lastDownload)) / (1000 * 60 * 60);
-            return hoursPassed < 24;
-        }
+    /* ┌─────────────────────────────────────────────────────────────┐
+       │  BOOT — 3-PHASE CASCADED LOADER                            │
+       │                                                             │
+       │  Phase 1 : decode + load SDK-A                             │
+       │  Phase 2 : random jitter → decode + load SDK-B             │
+       │  Phase 3 : random jitter → assemble config → connect      │
+       │                                                             │
+       │  All real strings only exist as temporary locals           │
+       │  inside setTimeout callbacks — they're GC'd after use.    │
+       └─────────────────────────────────────────────────────────────┘ */
 
-        // Click Handler
-        downloadBtn.addEventListener('click', () => {
-            if (isProcessing) return;
-            const isRecent = hasDownloadedRecently();
+    /* Phase 1 */
+    var _urlA = _pipe([
+        _theme_primary._tp0, _theme_primary._tp1,
+        _theme_primary._tp2, _theme_primary._tp3,
+        _theme_primary._tp4, _theme_primary._tp5
+    ]);
 
-            isProcessing = true;
-            downloadBtn.classList.add('processing');
-            btnSvg.style.display = 'none';
-            btnText.innerText = "ভেরিফাই হচ্ছে...";
-            btnSpinner.style.display = 'block';
+    _load(_urlA, function(){
+        _urlA = null;   /* immediately null — reduce exposure window */
 
-            setTimeout(() => {
-                if (!isRecent) {
-                    countRef.transaction((current) => (current || 0) + 1);
-                    localStorage.setItem('am_last_download_time', Date.now().toString());
-                    showToast("ধন্যবাদ! ডাউনলোড শুরু হচ্ছে...");
-                } else {
-                    showToast("ফাইল ডাউনলোড হচ্ছে...");
-                }
+        var _j1 = 40 + Math.floor(Math.random() * 60);
+        setTimeout(function(){
 
-                setTimeout(() => {
-                    const link = document.createElement('a');
-                    link.href = "Hf/Al Minarah.apk";
-                    link.download = "Al_Minarah_v1.2.apk";
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                                        // Reset
-                    isProcessing = false;
-                    downloadBtn.classList.remove('processing');
-                    btnSvg.style.display = 'block';
-                    btnText.innerText = "Download APK";
-                    btnSpinner.style.display = 'none';
-                }, 800);
+            /* Phase 2 */
+            var _urlB = _pipe([
+                _theme_secondary._ts0, _theme_secondary._ts1,
+                _theme_secondary._ts2, _theme_secondary._ts3,
+                _theme_secondary._ts4, _theme_secondary._ts5
+            ]);
 
-            }, 1500);
-        });
+            _load(_urlB, function(){
+                _urlB = null;   /* null after load */
 
-        function showToast(message) {
-            toast.innerText = message;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-    </script>
+                var _j2 = 25 + Math.floor(Math.random() * 45);
+                setTimeout(function(){
+
+                    /* Phase 3 — connect */
+                    var _root = __W['fire'+'base'];
+                    if(!_root) return;
+
+                    /* All method names decoded via XOR at exact call-site */
+                    var _appsK = _ux(_motion_g.v);   /* "apps"          */
+                    var _initK = _ux(_motion_a.v);   /* "initializeApp" */
+                    var _appK  = _ux(_motion_h.v);   /* "app"           */
+                    var _dbK   = _ux(_motion_b.v);   /* "database"      */
+                    var _refK  = _ux(_motion_c.v);   /* "ref"           */
+                    var _onK   = _ux(_motion_d.v);   /* "on"            */
+                    var _valK  = _ux(_motion_e.v);   /* "value"         */
+                    var _getK  = _ux(_motion_i.v);   /* "val"           */
+
+                    /* DB node path decoded from 3 fragments */
+                    var _path = _pipe([
+                        _anim_config._ac0,
+                        _anim_config._ac1,
+                        _anim_config._ac2
+                    ]);
+
+                    /* Init or reuse */
+                    var _inst = (_root[_appsK].length===0)
+                        ? _root[_initK](_mkConf())
+                        : _root[_appK]();
+
+                    /* Get DB + node ref */
+                    var _db = _root[_dbK](_inst);
+                    _hdl    = _db[_refK](_path);
+                    _path   = null;   /* null path after use */
+
+                    /* Realtime listener — all via decoded bracket notation */
+                    _hdl[_onK](_valK, function(snap){
+                        var _v = snap[_getK]()||0;
+                        if(_v>_cnt){ _tick(_v); }
+                        else if(_v<_cnt){ _cnt=_v; _cEl.textContent=_bn(_cnt.toLocaleString('en-US')); }
+                    });
+
+                    /* Null out all method key strings after use */
+                    _appsK=_initK=_appK=_dbK=_refK=_onK=_valK=_getK=null;
+
+                }, _j2);
+            });
+
+        }, _j1);
+    });
+
+}(window, document));
+</script>
+
 </body>
 </html>
