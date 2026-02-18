@@ -4,513 +4,513 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Al Minarah - Islamic App</title>
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Fontsource instead of Google Fonts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/hind-siliguri@4.5.12/index.css" />
+
+    <!-- Firebase SDKs (Direct & Correct Links) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
     <style>
-        *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-        body{font-family:'Hind Siliguri',sans-serif;margin:0;padding:0;background-color:#F0F2F5;display:flex;flex-direction:column;align-items:center;min-height:100vh;color:#333}
-        .header-bg{position:absolute;top:0;left:0;width:100%;height:280px;background:linear-gradient(135deg,#0F2027 0%,#203A43 50%,#2C5364 100%);border-bottom-left-radius:50% 40px;border-bottom-right-radius:50% 40px;z-index:0}
-        .container{position:relative;z-index:1;padding:20px;width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center}
-        .app-header{text-align:center;margin-top:30px;margin-bottom:10px;color:white}
-        .app-header h1{font-size:28px;font-weight:700;letter-spacing:1px;margin:10px 0 5px}
-        .app-header p{font-size:14px;opacity:.9;margin:0;font-weight:400}
-        .app-card{background:#fff;width:100%;border-radius:24px;padding:40px 25px;box-shadow:0 15px 35px rgba(0,0,0,.1);text-align:center;margin-top:20px;position:relative;overflow:hidden}
-        .logo-wrapper{width:90px;height:90px;background:#fff;border-radius:22px;margin:0 auto 25px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 20px rgba(29,191,115,.2);animation:float 3s ease-in-out infinite;overflow:hidden;padding:5px}
-        @keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
-        .logo-wrapper img{width:100%;height:100%;object-fit:contain;border-radius:18px}
-        .app-title{font-size:22px;margin:0 0 10px;color:#2C3E50;font-weight:700}
-        .app-description{font-size:15px;color:#666;line-height:1.6;margin-bottom:35px}
-        .features{display:flex;justify-content:space-around;margin-bottom:35px;text-align:center}
-        .feature-item{display:flex;flex-direction:column;align-items:center;gap:8px}
-        .feature-icon-box{width:45px;height:45px;background-color:#F0F7F4;border-radius:12px;display:flex;align-items:center;justify-content:center}
-        .feature-icon-box svg{width:22px;height:22px;fill:#1DBF73}
-        .feature-text{font-size:12px;color:#555;font-weight:600}
-        .download-btn{display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#1DBF73 0%,#14A65A 100%);color:white;text-decoration:none;padding:16px;border-radius:16px;font-weight:700;font-size:16px;width:100%;box-shadow:0 8px 20px rgba(29,191,115,.35);transition:transform .2s,box-shadow .2s,opacity .2s;border:none;cursor:pointer;position:relative;font-family:'Hind Siliguri',sans-serif}
-        .download-btn:active{transform:scale(.98);box-shadow:0 4px 10px rgba(29,191,115,.3)}
-        .download-btn.processing{opacity:.9;pointer-events:none}
-        .download-btn svg{width:24px;height:24px;fill:white}
-        .spinner{display:none;width:24px;height:24px;border:3px solid rgba(255,255,255,.3);border-radius:50%;border-top-color:#fff;animation:spin 1s linear infinite}
-        @keyframes spin{to{transform:rotate(360deg)}}
-        .version-info{margin-top:15px;font-size:12px;color:#999;display:flex;justify-content:center;align-items:center;gap:15px}
-        .stat-display{display:flex;align-items:center;gap:5px}
-        .live-dot{width:8px;height:8px;background:#1DBF73;border-radius:50%;animation:pulse 2s infinite}
-        @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(29,191,115,.4)}70%{box-shadow:0 0 0 6px rgba(29,191,115,0)}100%{box-shadow:0 0 0 0 rgba(29,191,115,0)}}
-        .footer{margin-top:30px;text-align:center;color:#888;font-size:13px;padding-bottom:20px}
-        .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:#333;color:#fff;padding:12px 24px;border-radius:50px;font-size:.9rem;opacity:0;transition:all .4s cubic-bezier(.68,-.55,.265,1.55);z-index:1000;box-shadow:0 5px 15px rgba(0,0,0,.2);white-space:nowrap}
-        .toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+        /* CSS Reset & Base */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            margin: 0; padding: 0;
+            background-color: #F0F2F5;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; color: #333;
+        }
+
+        /* Header Background */
+        .header-bg {
+            position: absolute; top: 0; left: 0; width: 100%; height: 260px;
+            background: linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%);
+            border-bottom-left-radius: 50% 40px; border-bottom-right-radius: 50% 40px;
+            z-index: 0;
+        }
+
+        /* Container */
+        .container {
+            position: relative; z-index: 1; padding: 15px; width: 100%;
+            max-width: 420px; display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* Header Text */
+        .app-header { text-align: center; margin-top: 20px; color: white; }
+        .app-header h1 { font-size: 26px; font-weight: 700; margin: 8px 0 4px; }
+        .app-header p { font-size: 13px; opacity: 0.9; margin: 0; }
+
+        /* Main Card */
+        .app-card {
+            background: #FFFFFF; width: 100%; border-radius: 22px;
+            padding: 35px 20px; box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+            text-align: center; margin-top: 15px; position: relative; overflow: hidden;
+        }
+
+        /* Logo Animation */
+        .logo-wrapper {
+            width: 85px; height: 85px; background: #FFFFFF;
+            border-radius: 20px; margin: 0 auto 20px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 16px rgba(29, 191, 115, 0.18);
+            animation: float 3s ease-in-out infinite; overflow: hidden; padding: 4px;
+        }
+        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-6px); } 100% { transform: translateY(0px); } }
+        .logo-wrapper img { width: 100%; height: 100%; object-fit: contain; border-radius: 16px; }
+
+        /* Content */
+        .app-title { font-size: 21px; margin: 0 0 8px; color: #2C3E50; font-weight: 700; }
+        .app-description { font-size: 14.5px; color: #666; line-height: 1.55; margin-bottom: 25px; }
+
+        /* Features Grid */
+        .features { display: flex; justify-content: space-around; margin-bottom: 25px; text-align: center; gap: 10px; }
+        .feature-item { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
+        .feature-icon-box {
+            width: 42px; height: 42px; background-color: #F0F7F4;
+            border-radius: 10px; display: flex; align-items: center; justify-content: center;
+        }
+        .feature-icon-box svg { width: 20px; height: 20px; fill: #1DBF73; }
+        .feature-text { font-size: 11.5px; color: #555; font-weight: 600; }
+
+        /* Buttons Container */
+        .btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; margin-bottom: 20px; }
+
+        /* Download Button */
+        .download-btn {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: linear-gradient(135deg, #1DBF73 0%, #14A65A 100%);
+            color: white; border: none; padding: 14px; border-radius: 14px;
+            font-weight: 700; font-size: 15px; width: 100%;
+            box-shadow: 0 7px 18px rgba(29, 191, 115, 0.32);
+            transition: transform 0.2s; cursor: pointer; text-decoration: none;
+        }
+        .download-btn:active { transform: scale(0.97); }
+        .download-btn svg { width: 22px; height: 22px; fill: white; }
+        
+        /* Share Button */
+        .share-btn {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: #ffffff; color: #1DBF73; border: 2px solid #1DBF73;
+            padding: 12px; border-radius: 14px; font-weight: 700; font-size: 15px;
+            width: 100%; cursor: pointer; transition: background 0.2s;
+        }
+        .share-btn:active { background: #f0fff8; }
+        .share-btn svg { width: 20px; height: 20px; fill: #1DBF73; }
+
+        /* Spinner */
+        .spinner { display: none; width: 22px; height: 22px; border: 2.5px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Stats */
+        .version-info {
+            margin-top: 12px; font-size: 11.5px; color: #999;
+            display: flex; justify-content: center; align-items: center; gap: 12px;
+        }
+        .stat-display { display: flex; align-items: center; gap: 4px; }
+        .live-dot { width: 7px; height: 7px; background: #1DBF73; border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(29, 191, 115, 0.4); } 70% { box-shadow: 0 0 0 5px rgba(29, 191, 115, 0); } 100% { box-shadow: 0 0 0 0 rgba(29, 191, 115, 0); } }
+
+        /* Screenshots Section */
+        .screenshots-section { width: 100%; margin-top: 20px; }
+        .section-title { font-size: 16px; font-weight: 700; color: #2C3E50; margin-bottom: 12px; text-align: left; }
+        .scroll-container {
+            display: flex; overflow-x: auto; gap: 10px; padding-bottom: 10px;
+            scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+        }
+        .scroll-container::-webkit-scrollbar { display: none; }
+        .screenshot-card {
+            min-width: 140px; height: 260px; background: #eee; border-radius: 12px;
+            overflow: hidden; scroll-snap-align: start; box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        .screenshot-card img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Install Guide */
+        .install-guide {
+            margin-top: 25px; padding: 15px; background: #f9f9f9;
+            border-radius: 12px; text-align: left; border-left: 4px solid #1DBF73;
+        }
+        .install-guide h4 { margin: 0 0 8px 0; color: #2C3E50; font-size: 14px; }
+        .install-guide ol { margin: 0; padding-left: 20px; font-size: 12.5px; color: #555; }
+        .install-guide li { margin-bottom: 4px; }
+
+        /* Footer */
+        .footer { margin-top: 25px; text-align: center; color: #888; font-size: 12.5px; padding-bottom: 30px; }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 25px; left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #333; color: #fff; padding: 10px 20px;
+            border-radius: 45px; font-size: 0.85rem; opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+            white-space: nowrap;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        /* Desktop Block */
+        .desktop-block {
+            display: none; position: fixed; inset: 0; background: white;
+            z-index: 9999; flex-direction: column; align-items: center;
+            justify-content: center; padding: 20px; text-align: center;
+        }
+        .desktop-block img { max-width: 260px; margin-bottom: 15px; border-radius: 10px; }
+        .desktop-block h2 { color: #1a1a1a; margin: 8px 0; font-size: 20px; }
+        .desktop-block p { color: #555; font-size: 15px; max-width: 380px; }
+
+        /* Anti-chat overlay */
+        .anti-chat-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            display: none;
+        }
+        .anti-chat-overlay h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #ff6b6b;
+        }
+        .anti-chat-overlay p {
+            font-size: 16px;
+            margin-bottom: 25px;
+            max-width: 400px;
+            line-height: 1.5;
+        }
+        .anti-chat-overlay button {
+            background: #1DBF73;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .anti-chat-overlay button:hover {
+            background: #14A65A;
+        }
+
+        @media (min-width: 768px) {
+            .container, .header-bg { display: none; }
+            .desktop-block { display: flex; }
+        }
     </style>
 </head>
 <body>
 
-<div id="toast" class="toast">ডাউনলোড শুরু হচ্ছে...</div>
-<div class="header-bg"></div>
-<div class="container">
-    <div class="app-header">
-        <h1>Al Minarah</h1>
-        <p>ইসলামের আলোতে আলোকিত হোন</p>
+    <!-- Desktop Block -->
+    <div class="desktop-block">
+        <img src="https://image.qwenlm.ai/public_source/7787525e-891b-431e-9b68-8edbca26c485/18c8d4b07-bb00-45dd-9897-8dfdd7594286.png" alt="Mobile Only">
+        <h2>শুধুমাত্র মোবাইলের জন্য</h2>
+        <p>এই ওয়েবসাইটটি শুধুমাত্র মোবাইল ডিভাইসের জন্য তৈরি। অনুগ্রহ করে আপনার মোবাইল ব্যবহার করুন।</p>
     </div>
-    <div class="app-card">
-        <div class="logo-wrapper">
-            <img src="/icon.jpg" alt="Al Minarah Logo">
+
+    <!-- Anti-chat Overlay -->
+    <div class="anti-chat-overlay" id="antiChatOverlay">
+        <h2>অ্যাপ এখনও প্রস্তুত হয়নি!</h2>
+        <p>APK ফাইলটি এখনও আপলোড করা হয়নি। অনুগ্রহ করে পরে আবার চেষ্টা করুন।</p>
+        <button onclick="document.getElementById('antiChatOverlay').style.display='none'">বন্ধ করুন</button>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">ডাউনলোড শুরু হচ্ছে...</div>
+
+    <div class="header-bg"></div>
+
+    <div class="container">
+        <div class="app-header">
+            <h1>Al Minarah</h1>
+            <p>ইসলামের আলোতে আলোকিত হোন</p>
         </div>
-        <h2 class="app-title">Al Minarah App</h2>
-        <p class="app-description">
-            ইসলামিক জ্ঞান আহরণের সহজ ও আধুনিক মাধ্যম। কুরআন, হাদিস, দোয়া ও প্রয়োজনীয় তথ্য এখন আপনার হাতের মুঠোয়।
-        </p>
-        <div class="features">
-            <div class="feature-item">
-                <div class="feature-icon-box">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6,2H18C19.1,2 20,2.9 20,4V20C20,21.1 19.1,22 18,22H6C4.9,22 4,21.1 4,20V4C4,2.9 4.9,2 6,2M6,4V20H18V4H6M8,6H16V8H8V6Z"/></svg>
-                </div>
-                <span class="feature-text">কুরআন</span>
+
+        <div class="app-card">
+            <div class="logo-wrapper">
+                <img src="/icon.jpg" alt="Al Minarah Logo">
             </div>
-            <div class="feature-item">
-                <div class="feature-icon-box">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3"/></svg>
+
+            <h2 class="app-title">Al Minarah App</h2>
+            <p class="app-description">
+                ইসলামিক জ্ঞান আহরণের সহজ ও আধুনিক মাধ্যম। কুরআন, হাদিস, দোয়া ও প্রয়োজনীয় তথ্য এখন আপনার হাতের মুঠোয়।
+            </p>
+
+            <div class="features">
+                <div class="feature-item">
+                    <div class="feature-icon-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6,2H18C19.1,2 20,2.9 20,4V20C20,21.1 19.1,22 18,22H6C4.9,22 4,21.1 4,20V4C4,2.9 4.9,2 6,2M6,4V20H18V4H6M8,6H16V8H8V6Z"/></svg>
+                    </div>
+                    <span class="feature-text">কুরআন</span>
                 </div>
-                <span class="feature-text">হাদিস</span>
+                <div class="feature-item">
+                    <div class="feature-icon-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3"/></svg>
+                    </div>
+                    <span class="feature-text">হাদিস</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"/></svg>
+                    </div>
+                    <span class="feature-text">দোয়া</span>
+                </div>
             </div>
-            <div class="feature-item">
-                <div class="feature-icon-box">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"/></svg>
-                </div>
-                <span class="feature-text">দোয়া</span>
+
+            <!-- Buttons Group -->
+            <div class="btn-group">
+                <button class="download-btn" id="downloadBtn">
+                    <svg id="btn-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"/></svg>
+                    <span id="btn-text">Download APK</span>
+                    <div class="spinner" id="btn-spinner"></div>
+                </button>
+                
+                <button class="share-btn" id="shareBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08C17.24 16.08 16.56 16.38 16.04 16.85L8.91 12.7C8.96 12.47 9 12.24 9 12S8.96 11.53 8.91 11.3L15.96 7.19C16.5 7.69 17.21 8 18 8C19.66 8 21 6.66 21 5S19.66 2 18 2 15 3.34 15 5C15 5.24 15.04 5.47 15.09 5.7L8.04 9.81C7.5 9.31 6.79 9 6 9C4.34 9 3 10.34 3 12S4.34 15 6 15C6.79 15 7.5 14.69 8.04 14.19L15.16 18.35C15.11 18.56 15.08 18.78 15.08 19C15.08 20.61 16.39 21.92 18 21.92S20.92 20.61 20.92 19 19.61 16.08 18 16.08M18 4C18.55 4 19 4.45 19 5S18.55 6 18 6 17 5.55 17 5 17.45 4 18 4M6 13C5.45 13 5 12.55 5 12S5.45 11 6 11 7 11.45 7 12 6.55 13 6 13M18 20C17.45 20 17 19.55 17 19S17.45 18 18 18 19 18.45 19 19 18.55 20 18 20Z"/></svg>
+                    <span>শেয়ার করুন</span>
+                </button>
+            </div>
+
+            <div class="version-info">
+                <span>Version 1.2.0 | 15 MB</span>
+                <span class="stat-display">
+                    <span class="live-dot"></span>
+                    <span id="downloadCount">০</span> ডাউনলোড
+                </span>
             </div>
         </div>
-        <button class="download-btn" id="downloadBtn">
-            <svg id="btn-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"/></svg>
-            <span id="btn-text">Download APK</span>
-            <div class="spinner" id="btn-spinner"></div>
-        </button>
-        <div class="version-info">
-            <span>Version 1.0.0 | 15 MB</span>
-            <span class="stat-display">
-                <span class="live-dot"></span>
-                <span id="downloadCount">০</span> ডাউনলোড
-            </span>
+
+        <!-- App Screenshots -->
+        <div class="screenshots-section">
+            <div class="section-title">অ্যাপের স্ক্রিনশট</div>
+            <div class="scroll-container">
+                <!-- Add your actual image links here -->
+                <div class="screenshot-card"><img src="https://via.placeholder.com/280x500/eeeeee/333333?text=Home+Screen" alt="Screenshot 1"></div>
+                <div class="screenshot-card"><img src="https://via.placeholder.com/280x500/e8f5e9/333333?text=Quran+Section" alt="Screenshot 2"></div>
+                <div class="screenshot-card"><img src="https://via.placeholder.com/280x500/e3f2fd/333333?text=Hadith+Section" alt="Screenshot 3"></div>
+                <div class="screenshot-card"><img src="https://via.placeholder.com/280x500/fff3e0/333333?text=Duas" alt="Screenshot 4"></div>
+            </div>
+        </div>
+
+        <!-- Installation Guide -->
+        <div class="install-guide">
+            <h4>কিভাবে ইনস্টল করবেন?</h4>
+            <ol>
+                <li>উপরের "Download APK" বাটনে ক্লিক করুন।</li>
+                <li>ডাউনলোড শেষ হলে ফাইলটি ওপেন করুন।</li>
+                <li>যদি "Install unknown apps" পারমিশন চায়, তবে Allow করুন।</li>
+                <li>ইনস্টল বাটনে ক্লিক করে অ্যাপটি চালু করুন।</li>
+            </ol>
+        </div>
+
+        <div class="footer">
+            Developed with ❤️ for the Ummah
         </div>
     </div>
-    <div class="footer">Developed with ❤️ for the Ummah</div>
-</div>
 
+    <script>
+    (function() {
+        'use strict';
 
-<script>
-/* ██████████████████████████████████████████████████████████████████
-   APP THEME & LAYOUT CONFIG MODULE  v3.4.1
-   Manages visual tokens, spacing scale, motion preferences
-   and progressive enhancement feature flags.
-   ██████████████████████████████████████████████████████████████████ */
-;(function(__W, __D, __U) {
-    'use strict';
+        // --- Anti-Desktop Check ---
+        if (window.innerWidth >= 768) {
+            return; // Desktop block already handles this
+        }
 
-    /* ┌─────────────────────────────────────────────────────────────┐
-       │  DESIGN TOKEN REGISTRY                                      │
-       │  Stores colour palette, spacing, radius, shadow depths.    │
-       │  Split across multiple frozen objects for tree-shaking.    │
-       └─────────────────────────────────────────────────────────────┘ */
-    var _tok_color = Object.freeze({
-        _c0:'#1DBF73', _c1:'#14A65A', _c2:'#0F2027',
-        _c3:'#203A43', _c4:'#2C5364', _c5:'#F0F2F5'
-    });
-    var _tok_space = Object.freeze({
-        _s0:4, _s1:8, _s2:12, _s3:16, _s4:20, _s5:24, _s6:32, _s7:40
-    });
-    var _tok_radius= Object.freeze({
-        _r0:8, _r1:12, _r2:16, _r3:22, _r4:24, _r5:50
-    });
-    var _tok_anim  = Object.freeze({
-        _a0:'ease', _a1:'ease-in-out', _a2:'linear',
-        _a3:'cubic-bezier(.68,-.55,.265,1.55)'
-    });
-
-    /* ┌─────────────────────────────────────────────────────────────┐
-       │  FEATURE FLAGS  (look like A/B test config)                 │
-       └─────────────────────────────────────────────────────────────┘ */
-    var _flags = Object.freeze({
-        liveCounter : true,
-        smoothAnim  : true,
-        offlineCache: false,
-        analytics   : false,
-        prefetch    : false
-    });
-
-    /* ┌─────────────────────────────────────────────────────────────┐
-       │  DECODE PRIMITIVES                                          │
-       │  _b64  : base64 → string                                   │
-       │  _rev  : reverse a string                                  │
-       │  _ux   : XOR-decode a byte array with key 0x4F            │
-       │  _pad  : ensure valid base64 padding                       │
-       └─────────────────────────────────────────────────────────────┘ */
-    var _b64 = function(s){ return atob(s); };
-    var _rev = function(s){ return s.split('').reverse().join(''); };
-    var _ux  = function(a){ return a.map(function(n){ return String.fromCharCode(n^0x4F); }).join(''); };
-    var _pad = function(s){ return s + '==='.slice((s.length+3)%4); };
-    var _cat = function(){ return Array.prototype.slice.call(arguments).join(''); };
-
-    /* Decode pipeline:  parts[] → join → pad → atob → reverse → final string */
-    var _pipe = function(parts){
-        return _rev(_b64(_pad(parts.join(''))));
-    };
-
-    /* ┌─────────────────────────────────────────────────────────────┐
-       │  RESOURCE MANIFEST                                          │
-       │                                                             │
-       │  HOW IT WORKS:                                             │
-       │  1. Every sensitive string is REVERSED first               │
-       │  2. Then base64-encoded                                     │
-       │  3. Then split into 4-6 fragments                          │
-       │  4. Fragments stored inside FAKE config/theme objects      │
-       │  5. At runtime: join → pad → atob → reverse = real string  │
-       │                                                             │
-       │  Object names chosen to look like UI/theme/metric data.   │
-       └─────────────────────────────────────────────────────────────┘ */
-
-    /*
-      Real value → reversed → base64 → split 4 parts
-      "https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"
-       reversed = "sj.tapmoc-ppa-esaberif/0.22.9/sjesaberif/moc.citatsg.www//:sptth"
-       b64(reversed) = "c2oudGFwbW9jLXBwYS1lc2FiZXJpZi8wLjIyLjkvc2plc2FiZXJpZi9tb2MuY2l0YXRzZy53d3cvLzpzcHR0aA=="
-    */
-    var _theme_primary = Object.freeze({
-        _tp0 : 'c2oudGFwbW9j',   /* fragment 1 of 6 */
-        _tp1 : 'LXBwYS1lc2Fi',   /* fragment 2 of 6 */
-        _tp2 : 'ZXJpZi8wLjIy',   /* fragment 3 of 6 */
-        _tp3 : 'Ljkvc2plc2Fi',   /* fragment 4 of 6 */
-        _tp4 : 'ZXJpZi9tb2Mu',   /* fragment 5 of 6 */
-        _tp5 : 'Y2l0YXRzZy53d3cvLzpzcHR0aA=='  /* fragment 6 of 6 */
-    });
-
-    /*
-      "https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"
-       reversed = "sj.tapmoc-esabatad-esaberif/0.22.9/sjesaberif/moc.citatsg.www//:sptth"
-       b64(rev) = "c2oudGFwbW9jLWVzYWJhdGFkLWVzYWJlcmlmLzAuMjIuOS9zamVzYWJlcmlmL21vYy5jaXRhdHNnLnd3dy8vOnNwdHRo"
-    */
-    var _theme_secondary = Object.freeze({
-        _ts0 : 'c2oudGFwbW9j',   /* fragment 1 of 6 */
-        _ts1 : 'LWVzYWJhdGFk',   /* fragment 2 of 6 */
-        _ts2 : 'LWVzYWJlcmlm',   /* fragment 3 of 6 */
-        _ts3 : 'LzAuMjIuOS9z',   /* fragment 4 of 6 */
-        _ts4 : 'amVzYWJlcmlm',   /* fragment 5 of 6 */
-        _ts5 : 'L21vYy5jaXRhdHNnLnd3dy8vOnNwdHRo'  /* fragment 6 of 6 */
-    });
-
-    /*
-      "https://tornament-bc970-default-rtdb.firebaseio.com/"
-       reversed = "/moc.oiesaberif.bdtr-tluafed-079cb-tnemanrot//:sptth"
-       b64(rev) = "L21vYy5vaWVzYWJlcmllZi5iZHRyLXRsdWFmZWQtMDc5Y2ItdG5lbWFucm90Ly86c3B0dGg="
-    */
-    var _spacing_config = Object.freeze({
-        _sc0 : 'L21vYy5vaWVz',   /* fragment 1 of 5 */
-        _sc1 : 'YWJlcmllZi5i',   /* fragment 2 of 5 */
-        _sc2 : 'ZHRyLXRsdWFm',   /* fragment 3 of 5 */
-        _sc3 : 'ZWQtMDc5Y2It',   /* fragment 4 of 5 */
-        _sc4 : 'dG5lbWFucm90Ly86c3B0dGg='  /* fragment 5 of 5 */
-    });
-
-    /*
-      "al_minarah_downloads"
-       reversed = "sdaolnwod_haranim_la"
-       b64(rev) = "c2Rhb2xud29kX2hhcmFuaW1fbGE="
-    */
-    var _anim_config = Object.freeze({
-        _ac0 : 'c2Rhb2xu',   /* fragment 1 of 3 */
-        _ac1 : 'd29kX2hh',   /* fragment 2 of 3 */
-        _ac2 : 'cmFuaW1fbGE='/* fragment 3 of 3 */
-    });
-
-    /* ┌─────────────────────────────────────────────────────────────┐
-       │  METHOD NAME TABLE  (XOR-encoded, key = 0x4F)              │
-       │  Each byte = real_charCode XOR 0x4F                        │
-       │  Stored as separate frozen objects — not an array          │
-       └─────────────────────────────────────────────────────────────┘ */
-
-    /* "initializeApp"  → XOR 0x4F = [38,33,38,59,38,46,35,38,53,42,14,63,63] */
-    var _motion_a = Object.freeze({ v:[38,33,38,59,38,46,35,38,53,42,14,63,63] });
-
-    /* "database"       → XOR 0x4F = [43,46,59,46,45,46,60,42] */
-    var _motion_b = Object.freeze({ v:[43,46,59,46,45,46,60,42] });
-
-    /* "ref"            → XOR 0x4F = [61,42,41] */
-    var _motion_c = Object.freeze({ v:[61,42,41] });
-
-    /* "on"             → XOR 0x4F = [32,33] */
-    var _motion_d = Object.freeze({ v:[32,33] });
-
-    /* "value"          → XOR 0x4F = [57,46,35,58,42] */
-    var _motion_e = Object.freeze({ v:[57,46,35,58,42] });
-
-    /* "transaction"    → XOR 0x4F = [59,61,46,33,60,46,44,59,38,32,33] */
-    var _motion_f = Object.freeze({ v:[59,61,46,33,60,46,44,59,38,32,33] });
-
-    /* "apps"           → XOR 0x4F = [46,63,63,60] */
-    var _motion_g = Object.freeze({ v:[46,63,63,60] });
-
-    /* "app"            → XOR 0x4F = [46,63,63] */
-    var _motion_h = Object.freeze({ v:[46,63,63] });
-
-    /* "val"            → XOR 0x4F = [57,46,35] */
-    var _motion_i = Object.freeze({ v:[57,46,35] });
-
-    /* ┌─────────────────────────────────────────────────────────────┐
-       │  DECOY HELPER FUNCTIONS                                     │
-       │  Look like real utility fns but do nothing meaningful      │
-       └─────────────────────────────────────────────────────────────┘ */
-    var _noop       = function(){};
-    var _uid        = function(){ return Math.random().toString(36).slice(2); };
-    var _epoch      = function(){ return Date.now(); };
-    var _hexStamp   = function(){ return _epoch().toString(16); };
-    var _pickRegion = function(seed){ var r=['ap-south-1','us-east-1','eu-west-2']; return r[seed%3]; };
-    var _hashStr    = function(s){ var h=0; for(var i=0;i<s.length;i++) h=(h<<5)-h+s.charCodeAt(i); return (h>>>0).toString(16); };
-    var _checkTTL   = function(ts,ttl){ return (Date.now()-ts)<ttl*1000; };
-
-    /* Fake Web Vitals observer stub */
-    if(__W.PerformanceObserver){
-        try{
-            new PerformanceObserver(function(l){
-                l.getEntries().forEach(function(e){ _noop(e.entryType,e.startTime); });
-            }).observe({entryTypes:['paint']});
-        }catch(_e){}
-    }
-
-    /* Fake IntersectionObserver for image lazy-load look */
-    if(__W.IntersectionObserver){
-        try{
-            var _io=new IntersectionObserver(function(es){ es.forEach(function(e){ _noop(e.isIntersecting); }); },{threshold:0.1});
-            __D.querySelectorAll('img').forEach(function(el){ _io.observe(el); });
-        }catch(_e){}
-    }
-
-    /* ┌─────────────────────────────────────────────────────────────┐
-       │  INTERNAL STATE (fully inside closure — console-invisible) │
-       └─────────────────────────────────────────────────────────────┘ */
-    var _cnt  = 0;
-    var _busy = false;
-    var _hdl  = null;   /* realtime handle — intentionally generic */
-
-    /* ┌─────────────────────────────────────────────────────────────┐
-       │  BENGALI DIGIT RENDERER                                     │
-       └─────────────────────────────────────────────────────────────┘ */
-    var _G = '\u09E6\u09E7\u09E8\u09E9\u09EA\u09EB\u09EC\u09ED\u09EE\u09EF';
-    var _bn = function(n){ return String(n).replace(/\d/g,function(c){ return _G[+c]; }); };
-
-    /* ┌─────────────────────────────────────────────────────────────┐
-       │  DOM REFS                                                   │
-       └─────────────────────────────────────────────────────────────┘ */
-    var _$ = function(id){ return __D.getElementById(id); };
-    var _cEl  = _$('downloadCount');
-    var _btn  = _$('downloadBtn');
-    var _ico  = _$('btn-svg');
-    var _lbl  = _$('btn-text');
-    var _spn  = _$('btn-spinner');
-    var _pop  = _$('toast');
-
-    /* ┌─────────────────────────────────────────────────────────────┐
-       │  SMOOTH COUNTER                                             │
-       └─────────────────────────────────────────────────────────────┘ */
-    function _tick(t){
-        if(_cnt>=t) return;
-        var s=Math.ceil(t/50)||1;
-        _cnt=Math.min(_cnt+s,t);
-        _cEl.textContent=_bn(_cnt.toLocaleString('en-US'));
-        if(_cnt<t){ setTimeout(function(){ _tick(t); },30); }
-    }
-
-    /* ┌─────────────────────────────────────────────────────────────┐
-       │  TOAST NOTIFICATION                                         │
-       └─────────────────────────────────────────────────────────────┘ */
-    function _flash(m){
-        _pop.textContent=m;
-        _pop.classList.add('show');
-        setTimeout(function(){ _pop.classList.remove('show'); },3000);
-    }
-
-    /* ┌─────────────────────────────────────────────────────────────┐
-       │  ANTI-SPAM TOKEN                                            │
-       │  Key built at runtime from two reversed b64 pieces         │
-       │  Looks like a CSP nonce or security fingerprint            │
-       └─────────────────────────────────────────────────────────────┘ */
-    var _TK = (function(){
-        /* "nonce-" → b64 → rev = "=6ecnon" → store reversed b64 */
-        var _p0 = _rev(_b64('bm9uY2Ut'));     /* decodes "nonce-" */
-        /* "fp-v2" → b64 → rev */
-        var _p1 = _rev(_b64('ZnAtdjI='));     /* decodes "fp-v2"  */
-        return _p0 + _p1;
-    })();
-
-    function _cool(){
-        try{
-            var _v=localStorage.getItem(_TK);
-            return !!_v && (Date.now()-+_v)<864e5;
-        }catch(_e){ return false; }
-    }
-
-    /* ┌─────────────────────────────────────────────────────────────┐
-       │  CLICK HANDLER                                              │
-       └─────────────────────────────────────────────────────────────┘ */
-    function _go(){
-        if(_busy) return;
-        var _c=_cool();
-        _busy=true;
-        _btn.classList.add('processing');
-        _ico.style.display='none';
-        _lbl.textContent='ভেরিফাই হচ্ছে...';
-        _spn.style.display='block';
-
-        _noop(_uid(),_hexStamp(),_pickRegion(3),_hashStr(_TK));
-
-        setTimeout(function(){
-            if(!_c && _hdl){
-                /* Method name decoded on-the-fly via XOR — not stored */
-                _hdl[ _ux(_motion_f.v) ](function(v){ return (v||0)+1; });
-                localStorage.setItem(_TK, String(Date.now()));
-                _flash('ধন্যবাদ! ডাউনলোড শুরু হচ্ছে...');
-            } else {
-                _flash('ফাইল ডাউনলোড হচ্ছে...');
+        // --- Anti-Chat System ---
+        const checkForChat = () => {
+            // Check for common chat/automation patterns
+            if (navigator.webdriver || 
+                window.chrome && window.chrome.runtime && 
+                navigator.plugins.length === 0 ||
+                /HeadlessChrome/.test(window.navigator.userAgent)) {
+                document.getElementById('antiChatOverlay').style.display = 'flex';
+                return true;
             }
-            setTimeout(function(){
-                var _a=__D['createElement']('a');
-                /* href built from split parts */
-                _a.href = _cat('Hf/Al',' Min','arah','.apk');
-                _a['download']='Al_Minarah_v1.2.apk';
-                __D.body.appendChild(_a);
-                _a.click();
-                __D.body.removeChild(_a);
-                _busy=false;
-                _btn.classList.remove('processing');
-                _ico.style.display='block';
-                _lbl.textContent='Download APK';
-                _spn.style.display='none';
-            },800);
-        },1500);
-    }
+            
+            // Check for unusual behavior
+            const startTime = performance.now();
+            setTimeout(() => {
+                const endTime = performance.now();
+                if (endTime - startTime > 100) {
+                    // Suspicious timing behavior
+                    document.getElementById('antiChatOverlay').style.display = 'flex';
+                }
+            }, 0);
 
-    _btn.addEventListener('click',_go);
+            return false;
+        };
 
-    /* ┌─────────────────────────────────────────────────────────────┐
-       │  RESOURCE INJECTOR                                          │
-       │  Appends <script> to <head> at runtime                     │
-       │  so no external URLs appear in static HTML                 │
-       └─────────────────────────────────────────────────────────────┘ */
-    function _load(url, cb){
-        var _s=__D['createElement']('scri'+'pt');
-        _s.src=url;
-        _s.async=true;
-        _s.crossOrigin='anonymous';
-        _s.onload=typeof cb==='function'?cb:_noop;
-        _s.onerror=function(){ _noop('err',url.length); };
-        (__D.head||__D.body).appendChild(_s);
-    }
+        // Run anti-chat check on load
+        if (checkForChat()) {
+            return;
+        }
 
-    /* ┌─────────────────────────────────────────────────────────────┐
-       │  CONFIG FACTORY                                             │
-       │  Assembles endpoint config using pipe() from fragments.    │
-       │  defineProperty keeps it invisible to enumeration tools.  │
-       └─────────────────────────────────────────────────────────────┘ */
-    function _mkConf(){
-        var _o=Object.create(null);
-        /* Property name itself decoded at call-time */
-        var _prop = _ux(_motion_b.v)+'URL';   /* "databaseURL" */
-        Object.defineProperty(_o, _prop, {
-            get: function(){
-                return _pipe([
-                    _spacing_config._sc0,
-                    _spacing_config._sc1,
-                    _spacing_config._sc2,
-                    _spacing_config._sc3,
-                    _spacing_config._sc4
-                ]);
-            },
-            enumerable  : false,
-            configurable: false
-        });
-        return _o;
-    }
+        // --- Configuration ---
+        const firebaseConfig = {
+            databaseURL: "https://tornament-bc970-default-rtdb.firebaseio.com/"
+        };
 
-    /* ┌─────────────────────────────────────────────────────────────┐
-       │  BOOT — 3-PHASE CASCADED LOADER                            │
-       │                                                             │
-       │  Phase 1 : decode + load SDK-A                             │
-       │  Phase 2 : random jitter → decode + load SDK-B             │
-       │  Phase 3 : random jitter → assemble config → connect      │
-       │                                                             │
-       │  All real strings only exist as temporary locals           │
-       │  inside setTimeout callbacks — they're GC'd after use.    │
-       └─────────────────────────────────────────────────────────────┘ */
+        // --- Firebase Initialization ---
+        let db = null;
+        let counterRef = null;
+        
+        try {
+            if (typeof firebase !== 'undefined') {
+                const app = firebase.initializeApp(firebaseConfig);
+                db = firebase.database(app);
+                counterRef = db.ref('al_minarah_downloads');
+                console.log("Firebase Connected");
+            } else {
+                console.error("Firebase SDK not loaded.");
+            }
+        } catch (e) {
+            console.error("Firebase Init Error:", e.message);
+        }
 
-    /* Phase 1 */
-    var _urlA = _pipe([
-        _theme_primary._tp0, _theme_primary._tp1,
-        _theme_primary._tp2, _theme_primary._tp3,
-        _theme_primary._tp4, _theme_primary._tp5
-    ]);
+        // --- Helper Functions ---
+        const $ = id => document.getElementById(id);
+        const toast = $('toast');
+        
+        const showToast = (msg) => {
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        };
 
-    _load(_urlA, function(){
-        _urlA = null;   /* immediately null — reduce exposure window */
+        const toBn = (num) => {
+            const bn = ['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+            return String(num).replace(/\d/g, d => bn[d]);
+        };
 
-        var _j1 = 40 + Math.floor(Math.random() * 60);
-        setTimeout(function(){
+        // --- Counter Logic ---
+        let currentCount = 0;
+        const countDisplay = $('downloadCount');
 
-            /* Phase 2 */
-            var _urlB = _pipe([
-                _theme_secondary._ts0, _theme_secondary._ts1,
-                _theme_secondary._ts2, _theme_secondary._ts3,
-                _theme_secondary._ts4, _theme_secondary._ts5
-            ]);
+        if (counterRef) {
+            counterRef.on('value', (snapshot) => {
+                const val = snapshot.val() || 0;
+                currentCount = val;
+                countDisplay.textContent = toBn(val.toLocaleString('en-US'));
+            }, (error) => {
+                console.error("Database read failed:", error);
+                countDisplay.textContent = "N/A";
+            });
+        } else {
+            countDisplay.textContent = toBn('1.2k');
+        }
 
-            _load(_urlB, function(){
-                _urlB = null;   /* null after load */
-
-                var _j2 = 25 + Math.floor(Math.random() * 45);
-                setTimeout(function(){
-
-                    /* Phase 3 — connect */
-                    var _root = __W['fire'+'base'];
-                    if(!_root) return;
-
-                    /* All method names decoded via XOR at exact call-site */
-                    var _appsK = _ux(_motion_g.v);   /* "apps"          */
-                    var _initK = _ux(_motion_a.v);   /* "initializeApp" */
-                    var _appK  = _ux(_motion_h.v);   /* "app"           */
-                    var _dbK   = _ux(_motion_b.v);   /* "database"      */
-                    var _refK  = _ux(_motion_c.v);   /* "ref"           */
-                    var _onK   = _ux(_motion_d.v);   /* "on"            */
-                    var _valK  = _ux(_motion_e.v);   /* "value"         */
-                    var _getK  = _ux(_motion_i.v);   /* "val"           */
-
-                    /* DB node path decoded from 3 fragments */
-                    var _path = _pipe([
-                        _anim_config._ac0,
-                        _anim_config._ac1,
-                        _anim_config._ac2
-                    ]);
-
-                    /* Init or reuse */
-                    var _inst = (_root[_appsK].length===0)
-                        ? _root[_initK](_mkConf())
-                        : _root[_appK]();
-
-                    /* Get DB + node ref */
-                    var _db = _root[_dbK](_inst);
-                    _hdl    = _db[_refK](_path);
-                    _path   = null;   /* null path after use */
-
-                    /* Realtime listener — all via decoded bracket notation */
-                    _hdl[_onK](_valK, function(snap){
-                        var _v = snap[_getK]()||0;
-                        if(_v>_cnt){ _tick(_v); }
-                        else if(_v<_cnt){ _cnt=_v; _cEl.textContent=_bn(_cnt.toLocaleString('en-US')); }
-                    });
-
-                    /* Null out all method key strings after use */
-                    _appsK=_initK=_appK=_dbK=_refK=_onK=_valK=_getK=null;
-
-                }, _j2);
+        // --- Download Logic ---
+        const downloadBtn = $('downloadBtn');
+        const btnText = $('btn-text');
+        const btnSpinner = $('btn-spinner');
+        const btnSvg = $('btn-svg');
+        
+        // Check if APK exists
+        const apkUrl = 'Hf/Al Minarah.apk';
+        let apkExists = false;
+        
+        fetch(apkUrl, { method: 'HEAD' })
+            .then(response => {
+                apkExists = response.ok;
+            })
+            .catch(() => {
+                apkExists = false;
             });
 
-        }, _j1);
-    });
+        downloadBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            
+            if (!apkExists) {
+                document.getElementById('antiChatOverlay').querySelector('h2').textContent = 'অ্যাপ এখনও প্রস্তুত হয়নি!';
+                document.getElementById('antiChatOverlay').querySelector('p').textContent = 'APK ফাইলটি এখনও আপলোড করা হয়নি। অনুগ্রহ করে পরে আবার চেষ্টা করুন।';
+                document.getElementById('antiChatOverlay').style.display = 'flex';
+                return;
+            }
+            
+            // UI Loading State
+            btnSvg.style.display = 'none';
+            btnSpinner.style.display = 'block';
+            btnText.textContent = 'প্রস্তুত হচ্ছে...';
+            downloadBtn.style.pointerEvents = 'none';
 
-}(window, document));
-</script>
+            // Check 24h cooldown using LocalStorage
+            const lastDlKey = 'al_minarah_last_dl';
+            const lastTime = localStorage.getItem(lastDlKey);
+            const now = Date.now();
+            const isRecent = lastTime && (now - parseInt(lastTime)) < (24 * 60 * 60 * 1000);
 
+            const finishDownload = () => {
+                // Create hidden link to download
+                const a = document.createElement('a');
+                a.href = apkUrl;
+                a.download = 'Al_Minarah_v1.2.apk';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+                showToast('ডাউনলোড শুরু হয়েছে!');
+                
+                // Reset UI
+                setTimeout(() => {
+                    btnSvg.style.display = 'block';
+                    btnSpinner.style.display = 'none';
+                    btnText.textContent = 'Download APK';
+                    downloadBtn.style.pointerEvents = 'auto';
+                }, 1000);
+            };
+
+            // If connected to DB and not recent, increment count
+            if (counterRef && !isRecent) {
+                counterRef.transaction(current => {
+                    return (current || 0) + 1;
+                }).then(() => {
+                    localStorage.setItem(lastDlKey, now.toString());
+                    finishDownload();
+                }).catch(err => {
+                    console.error("Transaction failed", err);
+                    finishDownload();
+                });
+            } else {
+                setTimeout(finishDownload, 500);
+            }
+        });
+
+        // --- Share Logic ---
+        const shareBtn = $('shareBtn');
+        
+        shareBtn.addEventListener('click', async () => {
+            const shareData = {
+                title: 'Al Minarah App',
+                text: 'ইসলামের আলোতে আলোকিত হোন। অ্যাপটি এখনই ডাউনলোড করুন!',
+                url: window.location.href
+            };
+
+            try {
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                    showToast('শেয়ার সম্পন্ন হয়েছে');
+                } else {
+                    await navigator.clipboard.writeText(window.location.href);
+                    showToast('লিংক কপি হয়েছে!');
+                }
+            } catch (err) {
+                console.log("Share failed or cancelled");
+            }
+        });
+
+    })();
+    </script>
 </body>
 </html>
