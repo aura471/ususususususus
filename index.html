@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Al Minarah - Islamic App</title>
+    
+    <!-- Google Fonts: Hind Siliguri for Bengali Text -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <style>
+        /* CSS Reset & Base */
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F0F2F5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        /* Decorative Background Header */
+        .header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 280px;
+            background: linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%);
+            border-bottom-left-radius: 50% 40px;
+            border-bottom-right-radius: 50% 40px;
+            z-index: 0;
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 1;            padding: 20px;
+            width: 100%;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header Section */
+        .app-header {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .app-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin: 10px 0 5px;
+        }
+
+        .app-header p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin: 0;
+            font-weight: 400;
+        }
+
+        /* Main Card */
+        .app-card {
+            background: #FFFFFF;
+            width: 100%;
+            border-radius: 24px;
+            padding: 40px 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Logo Wrapper - Updated for Image */
+        .logo-wrapper {
+            width: 90px;
+            height: 90px;
+            background: #FFFFFF; /* White background for better image visibility */
+            border-radius: 22px;
+            margin: 0 auto 25px;            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(29, 191, 115, 0.2);
+            animation: float 3s ease-in-out infinite;
+            overflow: hidden; /* Ensures image stays within rounded corners */
+            padding: 5px; /* Small padding inside the wrapper */
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Image Styling */
+        .logo-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Keeps aspect ratio intact */
+            border-radius: 18px;
+        }
+
+        /* Card Content */
+        .app-title {
+            font-size: 22px;
+            margin: 0 0 10px;
+            color: #2C3E50;
+            font-weight: 700;
+        }
+
+        .app-description {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 35px;
+        }
+
+        /* Features List */
+        .features {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 35px;
+            text-align: center;
+        }
+
+        .feature-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;            gap: 8px;
+        }
+
+        .feature-icon-box {
+            width: 45px;
+            height: 45px;
+            background-color: #F0F7F4;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-icon-box svg {
+            width: 22px;
+            height: 22px;
+            fill: #1DBF73;
+        }
+
+        .feature-text {
+            font-size: 12px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        /* Download Button */
+        .download-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #1DBF73 0%, #14A65A 100%);
+            color: white;
+            text-decoration: none;
+            padding: 16px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 16px;
+            width: 100%;
+            box-shadow: 0 8px 20px rgba(29, 191, 115, 0.35);
+            transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+            border: none;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .download-btn:active {
+            transform: scale(0.98);
+            box-shadow: 0 4px 10px rgba(29, 191, 115, 0.3);
+        }
+        .download-btn.processing {
+            opacity: 0.9;
+            pointer-events: none;
+        }
+
+        .download-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        /* Spinner */
+        .spinner {
+            display: none;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Version Info */
+        .version-info {
+            margin-top: 15px;
+            font-size: 12px;
+            color: #999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .stat-display {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #1DBF73;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {            0% { box-shadow: 0 0 0 0 rgba(29, 191, 115, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(29, 191, 115, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(29, 191, 115, 0); }
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #888;
+            font-size: 13px;
+            padding-bottom: 20px;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #333;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            white-space: nowrap;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Toast Message -->
+    <div id="toast" class="toast">ডাউনলোড শুরু হচ্ছে...</div>
+
+    <!-- Background Decoration -->
+    <div class="header-bg"></div>
+
+    <div class="container">
+        
+        <!-- Header Text Area -->
+        <div class="app-header">            <h1>Al Minarah</h1>
+            <p>ইসলামের আলোতে আলোকিত হোন</p>
+        </div>
+
+        <!-- Main Card -->
+        <div class="app-card">
+            
+            <!-- App Logo (IMAGE) -->
+            <div class="logo-wrapper">
+                <!-- Changed from SVG to IMG tag pointing to res/icon.jpg -->
+                <img src="res/icon.jpg" alt="Al Minarah Logo">
+            </div>
+
+            <h2 class="app-title">Al Minarah App</h2>
+            <p class="app-description">
+                ইসলামিক জ্ঞান আহরণের সহজ ও আধুনিক মাধ্যম। কুরআন, হাদিস, দোয়া ও প্রয়োজনীয় তথ্য এখন আপনার হাতের মুঠোয়।
+            </p>
+
+            <!-- Features Grid (SVG Icons) -->
+            <div class="features">
+                <div class="feature-item">
+                    <div class="feature-icon-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M6,2H18C19.1,2 20,2.9 20,4V20C20,21.1 19.1,22 18,22H6C4.9,22 4,21.1 4,20V4C4,2.9 4.9,2 6,2M6,4V20H18V4H6M8,6H16V8H8V6Z"/></svg>
+                    </div>
+                    <span class="feature-text">কুরআন</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19,3H14.82C14.4,1.84 13.3,1 12,1C10.7,1 9.6,1.84 9.18,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M12,3A1,1 0 0,1 13,4A1,1 0 0,1 12,5A1,1 0 0,1 11,4A1,1 0 0,1 12,3"/></svg>
+                    </div>
+                    <span class="feature-text">হাদিস</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,6A6,6 0 0,0 6,12A6,6 0 0,0 12,18A6,6 0 0,0 18,12A6,6 0 0,0 12,6M12,8A4,4 0 0,1 16,12A4,4 0 0,1 12,16A4,4 0 0,1 8,12A4,4 0 0,1 12,8Z"/></svg>
+                    </div>
+                    <span class="feature-text">দোয়া</span>
+                </div>
+            </div>
+
+            <!-- Download Button -->
+            <button class="download-btn" id="downloadBtn">
+                <svg id="btn-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"/></svg>
+                <span id="btn-text">Download APK</span>
+                <div class="spinner" id="btn-spinner"></div>
+            </button>
+
+            <div class="version-info">
+                <span>Version 1.0.0 | 15 MB</span>
+                <span class="stat-display">                    <span class="live-dot"></span>
+                    <span id="downloadCount">0</span> ডাউনলোড
+                </span>
+            </div>
+        </div>
+
+        <div class="footer">
+            Developed with ❤️ for the Ummah
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            databaseURL: "https://tornament-bc970-default-rtdb.firebaseio.com/"
+        };
+
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const database = firebase.database();
+        const countRef = database.ref('al_minarah_downloads');
+
+        const countElement = document.getElementById('downloadCount');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const btnSvg = document.getElementById('btn-svg');
+        const btnText = document.getElementById('btn-text');
+        const btnSpinner = document.getElementById('btn-spinner');
+        const toast = document.getElementById('toast');
+
+        let currentCount = 0;
+        let isProcessing = false;
+
+        // Bengali Number Converter
+        function toBengaliNumber(num) {
+            const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+            return String(num).replace(/\d/g, d => bengaliDigits[d]);
+        }
+
+        // Smooth Number Animation
+        function animateNumber(target) {
+            if (currentCount >= target) return;
+            const step = Math.ceil(target / 50) || 1;
+            currentCount += step;
+            if (currentCount > target) currentCount = target;
+            countElement.innerText = toBengaliNumber(currentCount.toLocaleString('en-US'));
+            if (currentCount < target) {
+                setTimeout(() => animateNumber(target), 30);
+            }        }
+
+        // Realtime Listener
+        countRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            const target = data || 0;
+            if (target > currentCount) {
+                animateNumber(target);
+            } else if (target < currentCount) {
+                currentCount = target;
+                countElement.innerText = toBengaliNumber(currentCount.toLocaleString('en-US'));
+            }
+        });
+
+        // Anti-Spam Logic
+        function hasDownloadedRecently() {
+            const lastDownload = localStorage.getItem('am_last_download_time');
+            if (!lastDownload) return false;
+            const hoursPassed = (Date.now() - parseInt(lastDownload)) / (1000 * 60 * 60);
+            return hoursPassed < 24;
+        }
+
+        // Click Handler
+        downloadBtn.addEventListener('click', () => {
+            if (isProcessing) return;
+            const isRecent = hasDownloadedRecently();
+
+            isProcessing = true;
+            downloadBtn.classList.add('processing');
+            btnSvg.style.display = 'none';
+            btnText.innerText = "ভেরিফাই হচ্ছে...";
+            btnSpinner.style.display = 'block';
+
+            setTimeout(() => {
+                if (!isRecent) {
+                    countRef.transaction((current) => (current || 0) + 1);
+                    localStorage.setItem('am_last_download_time', Date.now().toString());
+                    showToast("ধন্যবাদ! ডাউনলোড শুরু হচ্ছে...");
+                } else {
+                    showToast("ফাইল ডাউনলোড হচ্ছে...");
+                }
+
+                setTimeout(() => {
+                    const link = document.createElement('a');
+                    link.href = "Hf/Al Minarah.apk";
+                    link.download = "Al_Minarah_v1.2.apk";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                                        // Reset
+                    isProcessing = false;
+                    downloadBtn.classList.remove('processing');
+                    btnSvg.style.display = 'block';
+                    btnText.innerText = "Download APK";
+                    btnSpinner.style.display = 'none';
+                }, 800);
+
+            }, 1500);
+        });
+
+        function showToast(message) {
+            toast.innerText = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+    </script>
+</body>
+</html>
